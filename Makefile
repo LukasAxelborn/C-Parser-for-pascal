@@ -7,7 +7,7 @@ all: parser
 %.o: %.c %.h
 	$(CC) $(CFLAGS) -c $^
 
-parser: parser.o driver.c
+parser: keytoktab.o parser.o driver.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 clean: #make clean to run
