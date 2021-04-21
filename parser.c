@@ -71,21 +71,32 @@ static int pget_token()
 /*  PRIVATE METHODS for this OBJECT  (using "static" in C)            */
 /**********************************************************************/
 
+static void infunktion(const char *x)
+{
+   printf("\n *** In  %s", x);
+}
+
+static void outfunktion(const char *x)
+{
+   printf("\n *** out %s", x);
+}
+
 /**********************************************************************/
 /* The Parser functions                                               */
 /**********************************************************************/
-static void match(int t)
+static void
+match(int t)
 {
    if (DEBUG)
-      printf("\n --------In match expected: %4d, found: %4d",
-             t, lookahead);
+      printf("\n *** In  match \t expected: %s found: %s",
+             tok2lex(t), tok2lex(lookahead));
    if (lookahead == t)
       lookahead = pget_token();
    else
    {
       is_parse_ok = 0;
-      printf("\n *** Unexpected Token: expected: %4d found: %4d (in match)",
-             t, lookahead);
+      printf("\n *** Unexpected Token: expected: %s found: %s (in match)",
+             tok2lex(t), tok2lex(lookahead));
    }
 }
 
@@ -95,6 +106,7 @@ static void match(int t)
 
 static void type()
 {
+   infunktion(__func__);
    switch (lookahead)
    {
    case integer:
@@ -112,19 +124,24 @@ static void type()
    default:
       break;
    }
+   outfunktion(__func__);
 }
 static void id_list()
 {
+   infunktion(__func__);
+
    match(id);
    if (lookahead == ',')
    {
       match(',');
       id_list();
    }
+   outfunktion(__func__);
 }
 
 static void var_dec()
 {
+   infunktion(__func__);
    id_list();
    if (lookahead == ':')
    {
@@ -132,13 +149,16 @@ static void var_dec()
       type();
       match(';');
    }
+   outfunktion(__func__);
 }
 
 static void var_dec_list()
 {
+   infunktion(__func__);
    var_dec();
    if (lookahead == id)
       var_dec_list();
+   outfunktion(__func__);
 }
 
 /**********************************************************************/
@@ -147,6 +167,7 @@ static void var_dec_list()
 
 static void operand()
 {
+   infunktion(__func__);
    switch (lookahead)
    {
    case id:
@@ -160,22 +181,28 @@ static void operand()
    default:
       break;
    }
+   outfunktion(__func__);
 }
 
 static void term(); // funtion prototype for expr()
 
 static void expr()
 {
+   infunktion(__func__);
+
    term();
    if (lookahead == '+')
    {
       match('+');
       expr();
    }
+   outfunktion(__func__);
 }
 
 static void factor()
 {
+   infunktion(__func__);
+
    if (lookahead == '(')
    {
       match('(');
@@ -186,38 +213,50 @@ static void factor()
    {
       operand();
    }
+   outfunktion(__func__);
 }
 
 static void term()
 {
+   infunktion(__func__);
+
    factor();
    if (lookahead == '*')
    {
       match('*');
       term();
    }
+   outfunktion(__func__);
 }
 
 static void assign_stat()
 {
+   infunktion(__func__);
+
    match(id);
    match(assign);
    expr();
+   outfunktion(__func__);
 }
 
 static void stat()
 {
+   infunktion(__func__);
    assign_stat();
+   //outfunktion(__func__);
 }
 
 static void stat_list()
 {
+   infunktion(__func__);
+
    stat();
    if (lookahead == ';')
    {
       match(';');
       stat_list();
    }
+   outfunktion(__func__);
 }
 
 /**********************************************************************/
@@ -226,6 +265,8 @@ static void stat_list()
 
 static void program_header()
 {
+
+   infunktion("program");
    if (DEBUG)
       printf("\n *** In  program_header");
    match(program);
@@ -236,6 +277,8 @@ static void program_header()
    match(output);
    match(')');
    match(';');
+   outfunktion(__func__);
+   printf("\n");
 }
 
 static void var_part()
@@ -244,6 +287,8 @@ static void var_part()
       printf("\n *** In  var_part");
    match(var);
    var_dec_list();
+   outfunktion(__func__);
+   printf("\n");
 }
 
 static void stat_part()
@@ -254,6 +299,8 @@ static void stat_part()
    stat_list();
    match(end);
    match('.');
+   outfunktion(__func__);
+   printf("\n");
 }
 
 /**********************************************************************/
