@@ -6,8 +6,10 @@
 /* Include files                                                      */
 /**********************************************************************/
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include "lexer.h"
 
 /**********************************************************************/
 /* Other OBJECT's METHODS (IMPORTED)                                  */
@@ -17,7 +19,6 @@
 /**********************************************************************/
 /* OBJECT ATTRIBUTES FOR THIS OBJECT (C MODULE)                       */
 /**********************************************************************/
-#define FILENAME "input.txt"
 
 #define BUFSIZE 1024
 #define LEXSIZE 30
@@ -38,19 +39,11 @@ static int plex = 0; /* current index lexeme  buffer  */
 
 static void get_prog()
 {
-   FILE *INFILE = fopen(FILENAME, "r");
-   if (INFILE == NULL)
+   int c, index;
+   for (index = 0; ((c = getchar()) != EOF); index++)
    {
-      fputs("Failed to open the file\n", stderr);
-      exit(-1);
+      buffer[index] = c;
    }
-
-   while (fgets(buffer, BUFSIZE, INFILE) != NULL)
-   {
-      //printf("Line read = %s\n", buffer);
-   }
-
-   fclose(INFILE);
 }
 
 /**********************************************************************/
@@ -59,7 +52,7 @@ static void get_prog()
 
 static void pbuffer()
 {
-   printf("%s\n", buffer);
+   fwrite(buffer, BUFSIZE, 1, stdout);
 }
 
 /**********************************************************************/
@@ -69,6 +62,8 @@ static void pbuffer()
 static void get_char()
 {
    printf("\n *** TO BE DONE");
+
+https: //replit.com/@lukaaxel/dispaly-buffert#main.c
 }
 
 /**********************************************************************/
