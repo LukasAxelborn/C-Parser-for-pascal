@@ -39,10 +39,26 @@ static int plex = 0; /* current index lexeme  buffer  */
 
 static void get_prog()
 {
+   memset (lexbuf, '\0', sizeof(lexbuf));
+
    int c, index;
-   for (index = 0; ((c = getchar()) != EOF); index++)
+   for (index = 0; ((c = getchar()) != EOF) && (index < BUFSIZE); index++)
    {
-      buffer[index] = c;
+      if (c != '.')
+      {
+         buffer[index] = c;
+      }
+      else
+      {
+         buffer[index] = c;
+
+         if (index + 2 < BUFSIZE)
+         {
+            buffer[index + 1] = '\n';
+            buffer[index + 2] = '$';
+         }
+         break;
+      }
    }
 }
 
@@ -52,7 +68,12 @@ static void get_prog()
 
 static void pbuffer()
 {
+   printf("________________________________________\n");
+   printf("THE PROGRAM TEXT\n");
+   printf("________________________________________\n");
+
    fwrite(buffer, BUFSIZE, 1, stdout);
+   printf("\n________________________________________");
 }
 
 /**********************************************************************/
@@ -61,11 +82,48 @@ static void pbuffer()
 
 static void get_char()
 {
-   printf("\n *** TO BE DONE");
+	memset (lexbuf, '\0', sizeof(lexbuf));
+	plex = 0;
+	int goback = 0;
+	for(int i = 0; i < LEXSIZE; i++){
 
-https: //replit.com/@lukaaxel/dispaly-buffert#main.c
+		if(goback){
+			i=0;
+			goback = 0;
+		}
+
+		if(isalnum(buffer[pbuf])){
+
+			lexbuf[i] = buffer[pbuf];
+			pbuf++;
+			plex++;
+			
+		}
+		else if(ispunct(buffer[pbuf]) && (plex == 0)){
+			lexbuf[i] = buffer[pbuf];
+			pbuf++;
+			if(buffer[pbuf] == '='){
+				lexbuf[i+1] = buffer[pbuf];
+				pbuf++;
+			}
+			break;
+		}
+		else if(ispunct(buffer[pbuf]) &&(plex > 0)){
+			break;
+		}
+		else if(isspace(buffer[pbuf]) && (i == 0)){
+			while(isspace(buffer[pbuf])){
+				pbuf++;
+			}
+			//go back to i=0
+			goback = 1;
+		}
+		else{
+			pbuf++;
+			break;
+		} 
+	}
 }
-
 /**********************************************************************/
 /* End of buffer handling functions                                   */
 /**********************************************************************/
@@ -78,8 +136,14 @@ https: //replit.com/@lukaaxel/dispaly-buffert#main.c
 /**********************************************************************/
 int get_token()
 {
-   printf("\n *** TO BE DONE");
-   return 0;
+   if (pbuf == 0)
+   {
+      get_prog();
+      pbuffer();
+   }
+
+   get_char();
+   return lex2tok(lexbuf);
 }
 
 /**********************************************************************/
@@ -87,8 +151,8 @@ int get_token()
 /**********************************************************************/
 char *get_lexeme()
 {
-   printf("\n *** TO BE DONE");
-   return "$";
+
+   return lexbuf;
 }
 
 /**********************************************************************/

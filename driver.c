@@ -17,9 +17,11 @@
 /**********************************************************************/
 int main()
 {
-   parser() ? printf(" \n Parse Successful! \n")
-            : printf(" \n Parse Failed! \n");
-            
+   parser() ? printf("\nParse Successful! \n")
+            : printf("\nParse Failed! \n");
+   
+   printf("----------------------------------------\n");
+         
    return 1;
    }
 
