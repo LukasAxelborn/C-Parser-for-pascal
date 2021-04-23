@@ -15,7 +15,7 @@
 #include "keytoktab.h"         /* when the keytoktab is added   */
 #include "lexer.h"             /* when the lexer     is added   */
 #include "symtab.h"            /* when the symtab    is added   */
-/* #include "optab.h"       */ /* when the optab     is added   */
+#include "optab.h"             /* when the optab     is added   */
 
 /**********************************************************************/
 /* OBJECT ATTRIBUTES FOR THIS OBJECT (C MODULE)                       */

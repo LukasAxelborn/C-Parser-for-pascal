@@ -43,16 +43,48 @@ static int optab[][NENTS] = {
 /**********************************************************************/
 void p_optab()
 {
-   printf("\n *** TO BE DONE");
+   printf("________________________________________________________\n");
+   printf("THE OPERATOR TABLE\n");
+   printf("________________________________________________________\n");
+   printf("   operator        arg1       arg2     result\n");
+   printf("________________________________________________________\n");
+
+   for (int j = 0; optab[j][0] != '$'; j++)
+   {
+      printf("    %7s,\t%7s,   %7s,   %7s\n", tok2lex(optab[j][0]), tok2lex(optab[j][1]), tok2lex(optab[j][2]), tok2lex(optab[j][3]));
    }
+   printf("\n________________________________________________________\n");
+
+   
+}
 
 /**********************************************************************/
 /* return the type of a binary expression op arg1 arg2                */
 /**********************************************************************/
 int get_otype(int op, int arg1, int arg2)
 {  
-   printf("\n *** TO BE DONE"); return 0;
+   if (op == '+' || op == '*')
+   {
+      switch (arg1 + arg2)
+      {
+      case (integer+integer):
+         return integer;
+         break;
+      
+      case (real+real):
+         return real;
+         break;
+
+      case (integer+real):
+         return real;
+         break;
+
+      default:
+         break;
+      }
    }
+   return undef;
+}
 
 /**********************************************************************/
 /* End of code                                                        */
