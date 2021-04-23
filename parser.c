@@ -14,7 +14,7 @@
 /**********************************************************************/
 #include "keytoktab.h"         /* when the keytoktab is added   */
 #include "lexer.h"             /* when the lexer     is added   */
-/* #include "symtab.h"      */ /* when the symtab    is added   */
+#include "symtab.h"            /* when the symtab    is added   */
 /* #include "optab.h"       */ /* when the optab     is added   */
 
 /**********************************************************************/
@@ -70,14 +70,19 @@ static void type()
    {
    case integer:
       match(integer);
+      setv_type(integer);
       break;
 
    case real:
       match(real);
+      setv_type(real);
+
       break;
 
    case boolean:
       match(boolean);
+      setv_type(boolean);
+
       break;
 
    default:
@@ -88,6 +93,8 @@ static void type()
 static void id_list()
 {
    infunktion(__func__);
+
+   addv_name(get_lexeme());
 
    match(id);
    if (lookahead == ',')
@@ -229,6 +236,7 @@ static void program_header()
    if (DEBUG)
       printf("\n *** In  program_header");
    match(program);
+   addp_name(get_lexeme());
    match(id);
    match('(');
    match(input);
@@ -277,6 +285,9 @@ int parser()
    program_header();         // call the first grammar rule
    var_part();
    stat_part();
+
+   p_symtab(); // skriver ut symbål tabelen 
+
    return is_parse_ok; // status indicator
 }
 

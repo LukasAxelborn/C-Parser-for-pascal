@@ -59,8 +59,13 @@ static void set_addr(int ftref, int    faddr)  { addr[ftref] = faddr; }
 static void addrow(char *fname, toktyp frole, toktyp ftype, 
                    int fsize, int faddr)
 {
-    printf("\n *** TO BE DONE");
+   set_name(numrows, fname);
+   set_role(numrows, frole);
+   set_type(numrows, ftype);
+   set_size(numrows, fsize);
+   set_addr(numrows, faddr);
 
+   numrows++;
 }
 /**********************************************************************/
 /*  Initialise the symbol table                                       */
@@ -80,8 +85,14 @@ static void initst()
 /**********************************************************************/
  static int get_ref(char * fpname)
  {
-   printf("\n *** TO BE DONE"); return 0;
-
+   for(int i = startp; i<numrows; i++){
+      if (strcmp(get_name(i), fpname) == 0)
+      {
+         return i;
+      }
+      
+   }
+   return nfound;
  }
 
 /**********************************************************************/
@@ -90,50 +101,135 @@ static void initst()
 /**********************************************************************/
 /*  Display the symbol table                                          */
 /**********************************************************************/
+
+static int sumsize(){
+   int sum = 0;
+   for (int i = startp + 1; i < numrows; i++)
+   {
+      sum += get_size(i);
+   }
+   return sum;
+}
+
+static void set_all_addr(){
+
+   set_addr(startp+1, 0);
+
+   for (int i = startp+2; i < numrows; i++)
+   {
+      set_addr(i, get_size(i-1)+get_addr(i-1));
+   }
+   
+}
+
+
 static void p_symrow(int ftref)
 {
-   printf("\n *** TO BE DONE");
-
-   }
+   printf("    %7s\t%7s   %7s   %7d   %7d\n", get_name(ftref), tok2lex(get_role(ftref)), tok2lex(get_type(ftref)), get_size(ftref), get_addr(ftref));
+}
 
 void p_symtab()
 {
-   printf("\n *** TO BE DONE");
+   if(numrows == 0){
+      initst();
+      startp = numrows;
    }
+
+   set_size(startp, sumsize()); 
+   set_all_addr();
+
+   printf("________________________________________________________\n");
+   printf("THE SYMBOL TABLE\n");
+   printf("________________________________________________________\n");
+   printf("       NAME       ROLE       TYPE      SIZE      ADDR   \n");
+   printf("________________________________________________________\n");
+
+   for (int i = startp; i < numrows; i++)
+   {
+      p_symrow(i);
+   }
+   
+
+   printf("________________________________________________________\n");
+   printf("STATIC STORAGE REQUIRED is %d BYTES\n", get_size(startp));
+   printf("________________________________________________________\n");
+   
+
+}
 
 /**********************************************************************/
 /*  Add a program name to the symbol table                            */
 /**********************************************************************/
 void addp_name(char * fpname) { 
 
-   printf("\n *** TO BE DONE");
+   addrow(fpname, program, program, nfound, (numrows-startp));
+   
 
-   }
+}
 
 /**********************************************************************/
 /*  Add a variable name to the symbol table                           */
 /**********************************************************************/
-void addv_name(char * fpname) { printf("\n *** TO BE DONE"); }
+void addv_name(char * fpname) { 
+
+   addrow(fpname, var, undef, nfound, nfound);
+ 
+}
 
 /**********************************************************************/
 /*  Find a name in the the symbol table                               */
 /*  return a Boolean (true, false) if the name is in the ST           */
 /**********************************************************************/
-int find_name(char * fpname) { printf("\n *** TO BE DONE"); return 0; }
+int find_name(char * fpname) { 
+   
+   for(int i = startp; i<numrows; i++){
+      if (strcmp(get_name(i), fpname) == 0)
+      {
+         return 1;
+      }
+   }
+   return 0;
+}
 
 /**********************************************************************/
 /*  Set the type of an id list in the symbol table                    */
 /**********************************************************************/
 void setv_type(toktyp ftype) {
    
-   printf("\n *** TO BE DONE");
+   for (int i = numrows-1; (get_type(i) == undef); i--)
+   {
 
+      switch (ftype)
+      {
+         case integer:
+         set_size(i, 4);
+         set_type(i, integer);
+         break;
+         
+         case real:
+         set_size(i, 8);
+         set_type(i, real);
+         break;
+
+         case boolean:
+         set_size(i, 4);
+         set_type(i, boolean);
+         break;
+   
+         default:
+            break;
+      }
+   
+   }
 }
-
 /**********************************************************************/
 /*  Get the type of a variable from the symbol table                  */
 /**********************************************************************/
-toktyp get_ntype(char * fpname) { printf("\n *** TO BE DONE"); return 0; }
+toktyp get_ntype(char * fpname) { 
+   
+   return get_type(get_ref(fpname)); 
+
+}
 
 /**********************************************************************/
 /* End of code                                                        */

@@ -20,8 +20,9 @@ int main()
    parser() ? printf("\nParse Successful! \n")
             : printf("\nParse Failed! \n");
    
-   printf("----------------------------------------\n");
-         
+   printf("________________________________________________________\n");
+   
+
    return 1;
    }
 
