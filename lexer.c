@@ -1,3 +1,5 @@
+// AV Lukas Axelborn - 0003218773
+
 /**********************************************************************/
 /* lab 1 DVG C01 - Lexer OBJECT                                       */
 /**********************************************************************/
@@ -52,10 +54,12 @@ static void get_prog()
       {
          buffer[index] = c;
 
-         if (index + 2 < BUFSIZE)
+         if (index + 3 < BUFSIZE)
          {
             buffer[index + 1] = '\n';
             buffer[index + 2] = '$';
+			buffer[index + 3] = '\0';
+
          }
          break;
       }
@@ -69,10 +73,11 @@ static void get_prog()
 static void pbuffer()
 {
    printf("________________________________________________________\n");
-   printf("THE PROGRAM TEXT\n");
+   printf(" THE PROGRAM TEXT\n");
    printf("________________________________________________________\n");
 
-   fwrite(buffer, BUFSIZE, 1, stdout);
+   fwrite(buffer, strlen(buffer), 1, stdout);
+		   
    printf("\n________________________________________________________\n");
 }
 
@@ -112,10 +117,12 @@ static void get_char()
 			break;
 		}
 		else if(isspace(buffer[pbuf]) && (i == 0)){
-			while(isspace(buffer[pbuf])){
+			/*while(isspace(buffer[pbuf])){
 				pbuf++;
-			}
+
+			}*/
 			//go back to i=0
+			pbuf++; // om en katarstråf händer gå till backa till while loopen			
 			goback = 1;
 		}
 		else{
@@ -151,7 +158,6 @@ int get_token()
 /**********************************************************************/
 char *get_lexeme()
 {
-
    return lexbuf;
 }
 

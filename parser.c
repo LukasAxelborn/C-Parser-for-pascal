@@ -20,7 +20,7 @@
 /**********************************************************************/
 /* OBJECT ATTRIBUTES FOR THIS OBJECT (C MODULE)                       */
 /**********************************************************************/
-#define DEBUG 0
+#define DEBUG 1
 static int lookahead = 0;
 static int is_parse_ok = 1;
 
@@ -47,15 +47,13 @@ static void outfunktion(const char *x)
 static void match(int t)
 {
    if (DEBUG)
-      printf("\n *** In  match \t expected: %s found: %s",
-             tok2lex(t), tok2lex(lookahead));
+      printf("\n *** In  match \t expected: %s found: %s", tok2lex(t), tok2lex(lookahead));
    if (lookahead == t)
       lookahead = get_token();
    else
    {
       is_parse_ok = 0;
-      printf("\n *** Unexpected Token: expected: %s found: %s (in match)",
-             tok2lex(t), tok2lex(lookahead));
+      printf("\n *** Unexpected Token: expected: %s found: %s (in match)", tok2lex(t), tok2lex(lookahead));
    }
 }
 
@@ -232,7 +230,7 @@ static void stat_list()
 static void program_header()
 {
 
-   infunktion("program");
+   //infunktion("program");
    if (DEBUG)
       printf("\n *** In  program_header");
    match(program);
@@ -286,8 +284,15 @@ int parser()
    var_part();
    stat_part();
 
-   p_symtab(); // skriver ut symbål tabelen 
+   if(is_parse_ok){
+       printf("Parse Successful! \n");
+   }else{
+      printf("Parse Failed! \n");
+   }
+   printf("________________________________________________________\n");
 
+   p_symtab(); // skriver ut symbål tabelen 
+   
    return is_parse_ok; // status indicator
 }
 

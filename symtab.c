@@ -1,3 +1,5 @@
+// AV Lukas Axelborn - 0003218773
+
 /**********************************************************************/
 /* lab 1 DVG C01 - Symbol Table OBJECT                                */
 /**********************************************************************/
@@ -139,7 +141,7 @@ void p_symtab()
    set_all_addr();
 
    printf("________________________________________________________\n");
-   printf("THE SYMBOL TABLE\n");
+   printf(" THE SYMBOL TABLE\n");
    printf("________________________________________________________\n");
    printf("       NAME       ROLE       TYPE      SIZE      ADDR   \n");
    printf("________________________________________________________\n");
@@ -151,7 +153,7 @@ void p_symtab()
    
 
    printf("________________________________________________________\n");
-   printf("STATIC STORAGE REQUIRED is %d BYTES\n", get_size(startp));
+   printf(" STATIC STORAGE REQUIRED is %d BYTES\n", get_size(startp));
    printf("________________________________________________________\n");
    
 

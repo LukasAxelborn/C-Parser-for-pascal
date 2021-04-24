@@ -1,3 +1,4 @@
+// AV Lukas Axelborn - 0003218773
 /**********************************************************************/
 /* lab 1 DVG C01 - Driver OBJECT                                      */
 /**********************************************************************/
@@ -73,24 +74,22 @@ static tab keywordtab[] = {
 void p_toktab()
 {
 	printf("________________________________________________________\n");
-	printf("THE PROGRAM KEYWORDS\n\n");
+	printf("THE PROGRAM KEYWORDS\n");
 	printf("________________________________________________________\n");
 
-	for (size_t i = 0; i < 9; i++)
+	for (int i = 0; keywordtab[i].token != nfound; i++)
 	{
 		printf("%10s %d\n", keywordtab[i].text, keywordtab[i].token);
 	}
-	printf("\n");
 
 	printf("________________________________________________________\n");
-	printf("THE PROGRAM TOKENS\n\n");
+	printf("THE PROGRAM TOKENS\n");
 	printf("________________________________________________________\n");
 
-	for (size_t i = 0; i < 20; i++)
+	for (int i = 0; tokentab[i].token != nfound; i++)
 	{
 		printf("%10s %d\n", tokentab[i].text, tokentab[i].token);
 	}
-	printf("\n");
 }
 
 /**********************************************************************/
@@ -98,7 +97,7 @@ void p_toktab()
 /**********************************************************************/
 toktyp lex2tok(char *fplex)
 {
-	for (int i = 0; i <= 20; i++)
+	for (int i = 0; tokentab[i].token != nfound; i++)
 	{
 		if (strcmp(fplex, tokentab[i].text) == 0)
 		{
@@ -106,12 +105,17 @@ toktyp lex2tok(char *fplex)
 		}
 	}
 
-	for (int i = 0; i <= 9; i++)
+	for (int i = 0; keywordtab[i].token != nfound; i++)
 	{
 		if (strcmp(fplex, keywordtab[i].text) == 0)
 		{
 			return keywordtab[i].token;
 		}
+	}
+
+	if (isdigit(fplex[0]))
+	{
+		return number;
 	}
 	
 	return 258; // om inget stoppar denna retur måste det vara ett id
@@ -139,7 +143,7 @@ char *tok2lex(toktyp ftok)
 {
 	if (ftok < tend)
 	{ 
-		for (int i = 0; i <= 20; i++)
+		for (int i = 0; tokentab[i].token != nfound; i++)
 		{
 			if (tokentab[i].token == ftok)// i är för stort funderar på att ta bort if-satsen
 			{
