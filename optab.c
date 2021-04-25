@@ -1,4 +1,4 @@
-// AV Lukas Axelborn - 0003218773
+// AV Lukas Axelborn
 
 /**********************************************************************/
 /* lab 1 DVG C01 - Operator Table OBJECT                              */
