@@ -85,7 +85,7 @@ int get_otype(int op, int arg1, int arg2)
          break;
       }
    }
-   return undef;
+   return nfound;
 }
 
 /**********************************************************************/

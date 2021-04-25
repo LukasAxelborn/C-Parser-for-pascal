@@ -174,7 +174,7 @@ void addp_name(char * fpname) {
 /**********************************************************************/
 void addv_name(char * fpname) { 
 
-   addrow(fpname, var, undef, nfound, nfound);
+   addrow(fpname, var, error, 0, 0);
  
 }
 
@@ -198,7 +198,7 @@ int find_name(char * fpname) {
 /**********************************************************************/
 void setv_type(toktyp ftype) {
    
-   for (int i = numrows-1; (get_type(i) == undef); i--)
+   for (int i = numrows-1; (get_type(i) == error); i--)
    {
 
       switch (ftype)
