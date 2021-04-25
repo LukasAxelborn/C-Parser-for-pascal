@@ -94,18 +94,16 @@ static void type()
 static void id_list()
 {
    infunktion(__func__);
-  // char *name = get_lexeme();
    
    if (lookahead == id)
    {
       if(!find_name(get_lexeme())){
          addv_name(get_lexeme());
-         match(id);
       }
       else{
          printf("SEMANTIC: ID already declared:\t%s\n", get_lexeme());
-         match(id);
       }
+      match(id);
          
 
    }else{
@@ -160,6 +158,7 @@ static void operand()
    switch (lookahead)
    {
    case id:
+      find_name(get_lexeme()) ? 1 : printf("SEMANTIC: ID NOT declared: %s\n", get_lexeme());
       match(id);
       break;
 
@@ -168,6 +167,7 @@ static void operand()
       break;
 
    default:
+      printf("SYNTAX:   Operand Expected\n");
       break;
    }
    outfunktion(__func__);
@@ -182,7 +182,7 @@ static void expr()
    term();
    if (lookahead == '+')
    {
-      match('+');
+      match('+'); 
       expr();
    }
    outfunktion(__func__);
@@ -212,7 +212,7 @@ static void term()
    factor();
    if (lookahead == '*')
    {
-      match('*');
+      match('*'); 
       term();
    }
    outfunktion(__func__);
@@ -221,9 +221,17 @@ static void term()
 static void assign_stat()
 {
    infunktion(__func__);
-
-      match(id)  ?  1  :   printf("SYNTAX:   ID expected found\t%s\n", get_lexeme());;
-      match(assign);
+      if (lookahead == id)
+      {
+         if(!find_name(get_lexeme())){
+            printf("SEMANTIC: ID NOT declared:\t%s\n", get_lexeme());
+         }
+               
+         match(id);
+      }else{
+         printf("SYNTAX:   ID expected found\t%s\n", get_lexeme());
+      }        
+      match(assign)  ?  1  :   printf("SYNTAX:   Symbol expected %s found\t%s\n", tok2lex(assign), get_lexeme());
       expr();
   
 
@@ -298,10 +306,10 @@ static void stat_part()
 {
    if (DEBUG)
       printf("\n *** In  stat_part\n");
-   match(begin);
+   match(begin)      ?  1  :   printf("SYNTAX:   Symbol expected %s found\t%s\n", tok2lex(begin),  get_lexeme());
    stat_list();
-   match(end);
-   match('.');
+   match(end)        ?  1  :   printf("SYNTAX:   Symbol expected %s found\t%s\n", tok2lex(end),  get_lexeme());
+   match('.')        ?  1  :   printf("SYNTAX:   Symbol expected %s found\t%s\n", tok2lex('.'),  get_lexeme());
    outfunktion(__func__);
    if (DEBUG)
       printf("\n");
@@ -316,9 +324,27 @@ int parser()
    if (DEBUG)
       printf(" *** In  parser\n");
    lookahead = get_token(); // get the first token
-   program_header();         // call the first grammar rule
-   var_part();
-   stat_part();
+
+   if (lookahead != '$')
+   {
+      program_header();         // call the first grammar rule
+      var_part();
+      stat_part();
+   }else{
+      printf("SYNTAX:   Input file is empty\n");
+   }
+   
+
+   if (lookahead != '$')
+   {
+      printf("SYNTAX:   Extra symbols after end of parse!\n          ");
+      for (lookahead = lookahead; lookahead != '$' ; lookahead = get_token())
+      {
+         printf("%s ", get_lexeme());
+      }
+      printf("\n");
+   }
+   
 
    printf("________________________________________________________\n");
 

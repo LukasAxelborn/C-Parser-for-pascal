@@ -41,29 +41,14 @@ static int plex = 0; /* current index lexeme  buffer  */
 
 static void get_prog()
 {
-   memset (lexbuf, '\0', sizeof(lexbuf));
+   memset (buffer, '\0', sizeof(buffer));
 
    int c, index;
-   for (index = 0; ((c = getchar()) != EOF) && (index < BUFSIZE); index++)
+   for (index = 0; ((c = getchar()) != EOF); index++)
    {
-      if (c != '.')
-      {
-         buffer[index] = c;
-      }
-      else
-      {
-         buffer[index] = c;
-
-         if (index + 3 < BUFSIZE)
-         {
-            buffer[index + 1] = '\n';
-            buffer[index + 2] = '$';
-			buffer[index + 3] = '\0';
-
-         }
-         break;
-      }
+    	buffer[index] = c;
    }
+    buffer[index] = '$';
 }
 
 /**********************************************************************/
@@ -117,13 +102,10 @@ static void get_char()
 			break;
 		}
 		else if(isspace(buffer[pbuf]) && (i == 0)){
-			/*while(isspace(buffer[pbuf])){
-				pbuf++;
-
-			}*/
-			//go back to i=0
 			pbuf++; // om en katarstråf händer gå till backa till while loopen			
+			//go back to i=0
 			goback = 1;
+
 		}
 		else{
 			pbuf++;
